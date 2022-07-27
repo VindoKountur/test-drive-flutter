@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool isValidForm = false;
+  bool isLoading = false;
 
   final pattern = r'(?=.*?[A-Z])(?=.*?[0-9])';
 
@@ -71,10 +72,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(60)),
                   onPressed: isValidForm
                       ? () {
-                          Timer(Duration(seconds: 3), () {
-                            log('delay lah');
+                          setState(() => isLoading = true);
+                          Future.delayed(const Duration(seconds: 3), () {
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                   builder: (context) => const HomePage(),
@@ -83,16 +86,11 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         }
                       : null,
-                  // onPressed: () {
-                  //   // final isValidForm = _formKey.currentState!.validate();
-                  //   log('hasil: $isValidForm');
-                  //   if (isValidForm) {
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       const SnackBar(content: Text('Yaya')),
-                  //     );
-                  //   }
-                  // },
-                  child: const Text('Submit'),
+                  child: isLoading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text('Sign In'),
                 )
               ],
             ),

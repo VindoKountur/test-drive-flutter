@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_drive/repository.dart';
 
+import '../models/data.dart';
 import '../models/users.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,13 +30,6 @@ class _HomePageState extends State<HomePage> {
         dataUsers = value;
       });
     });
-
-    // TINGGAL MO AMBE INI DATA BAGIMANA STO
-    // dataUsers = users.then((value) {
-    //   return print(value.page);
-    // });
-    // print(users.then((value) => print));
-    // users.then((value) => print(value.data));
   }
 
   @override

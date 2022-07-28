@@ -3,7 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'dart:developer';
 import 'dart:async';
 
-import 'package:test_drive/home_page.dart';
+import 'package:test_drive/container_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -77,10 +77,11 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: isValidForm
                       ? () {
                           setState(() => isLoading = true);
-                          Future.delayed(const Duration(seconds: 3), () {
+                          Future.delayed(const Duration(seconds: 0), () {
+                            //GANTI JADI 3
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
-                                  builder: (context) => const HomePage(),
+                                  builder: (context) => const ContainerPage(),
                                 ),
                                 (route) => false);
                           });

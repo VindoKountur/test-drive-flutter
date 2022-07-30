@@ -77,8 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: isValidForm
                       ? () {
                           setState(() => isLoading = true);
-                          Future.delayed(const Duration(seconds: 0), () {
-                            //GANTI JADI 3
+                          Future.delayed(const Duration(seconds: 3), () {
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                   builder: (context) => const ContainerPage(),

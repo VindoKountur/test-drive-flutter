@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:test_drive/repository.dart';
 
 import '../models/data.dart';
-import '../models/users.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -15,10 +14,6 @@ class _HomePageState extends State<HomePage> {
   late Future users;
   List<Data> dataUsers = [];
   Repository repository = Repository();
-
-  // getData() async {
-  //   users = (await repository.getUsersData()) as Future<Users>;
-  // }
 
   @override
   void initState() {
@@ -39,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('HOME'),
       ),
       body: ListView.separated(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.all(2),
                 child: Card(
@@ -71,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.person),
+                                  const Icon(Icons.person),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8),
                                     child: Text(
@@ -81,10 +76,10 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Row(
                                 children: [
-                                  Icon(Icons.mail),
+                                  const Icon(Icons.mail),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8),
-                                    child: Text('${dataUsers[index].email}'),
+                                    child: Text(dataUsers[index].email),
                                   ),
                                 ],
                               ),
@@ -96,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-          separatorBuilder: ((context, index) => SizedBox(height: 6)),
+          separatorBuilder: ((context, index) => const SizedBox(height: 6)),
           itemCount: dataUsers.length),
     );
   }

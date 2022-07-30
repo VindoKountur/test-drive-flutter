@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_drive/pages/detail_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/data.dart';
 import '../repository.dart';
@@ -16,20 +17,34 @@ class _UsersPageState extends State<UsersPage> {
   List<Data> dataUsers = [];
   Repository repository = Repository();
 
+  List<int> highlightUserId = [];
+
   @override
   void initState() {
     super.initState();
-    users = repository.getUsersData();
+    print('init');
+    getData();
+    getHighlighted();
+  }
 
-    users.then((value) {
-      setState(() {
-        dataUsers = value;
-      });
+  getData() async {
+    List<Data> users = await repository.getUsersData();
+    setState(() {
+      dataUsers = users;
+    });
+  }
+
+  getHighlighted() async {
+    final prefs = await SharedPreferences.getInstance();
+    final highlighted = prefs.getStringList('highlighted') ?? [];
+    setState(() {
+      highlightUserId = highlighted.map((e) => int.parse(e)).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build');
     return Scaffold(
         appBar: AppBar(
           title: const Text('USERS'),
@@ -51,61 +66,67 @@ class _UsersPageState extends State<UsersPage> {
         },
       );
 
-  Widget userCard(Data user) => GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailPage(user: user),
-            ),
-          );
-        },
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          color: Colors.black12,
-          margin: EdgeInsets.zero,
-          shadowColor: Colors.black26,
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10)),
-                child: Image.network(
-                  user.avatar,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const Text('Name :'),
-                      Text(
-                        '${user.first_name} ${user.last_name}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text('Email :'),
-                      Text(
-                        user.email,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+  Widget userCard(Data user) {
+    final bool isHighlight = highlightUserId.contains(user.id);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPage(user: user),
           ),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.blue, width: isHighlight ? 4 : 0),
         ),
-      );
+        color: Colors.black12,
+        margin: EdgeInsets.zero,
+        shadowColor: Colors.black26,
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: Image.network(
+                user.avatar,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Text('Name :'),
+                    Text(
+                      '${user.first_name} ${user.last_name}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Email :'),
+                    Text(
+                      user.email,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

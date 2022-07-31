@@ -24,11 +24,29 @@ class DetailPage extends StatelessWidget {
     return snackText;
   }
 
+  toogleBackButton() async {
+    final prefs = await SharedPreferences.getInstance();
+    final highlighted = prefs.getStringList('highlighted') ?? [];
+    return highlighted.map((e) => int.parse(e)).toList();
+    // return Navigator.pop(
+    //               context, highlighted.map((e) => int.parse(e)).toList());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail'),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () async {
+            final highligted = await toogleBackButton();
+            // print(tes.runtimeType);
+            Navigator.pop(context, highligted);
+            // Navigator.pop(context, true);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
@@ -64,7 +82,6 @@ class DetailPage extends StatelessWidget {
                 final String snackText = await setHighlight(user.id);
                 final prefs = await SharedPreferences.getInstance();
                 final highlighted = prefs.getStringList('highlighted');
-                print(highlighted);
                 ScaffoldMessenger.of(context)
                   ..removeCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Text(snackText)));

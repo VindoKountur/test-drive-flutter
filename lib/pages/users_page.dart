@@ -22,7 +22,6 @@ class _UsersPageState extends State<UsersPage> {
   @override
   void initState() {
     super.initState();
-    print('init');
     getData();
     getHighlighted();
   }
@@ -44,7 +43,6 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Scaffold(
         appBar: AppBar(
           title: const Text('USERS'),
@@ -75,7 +73,10 @@ class _UsersPageState extends State<UsersPage> {
           MaterialPageRoute(
             builder: (context) => DetailPage(user: user),
           ),
-        );
+        ).then((value) {
+          // print(value.runtimeType);
+          setState(() => highlightUserId = value);
+        });
       },
       child: Card(
         shape: RoundedRectangleBorder(

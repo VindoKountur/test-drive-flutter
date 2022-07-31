@@ -19,8 +19,8 @@ class Repository {
     }
   }
 
-  Future getUser() async {
-    final res = await http.get(Uri.parse('$_baseUrl/1'));
+  Future getUser(int userId) async {
+    final res = await http.get(Uri.parse('$_baseUrl/$userId'));
 
     if (res.statusCode == 200) {
       final user = User.fromJson(jsonDecode(res.body));

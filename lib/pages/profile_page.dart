@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_drive/login_page.dart';
 
 import '../models/data.dart';
@@ -22,10 +23,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   getData() async {
-    final data = await repository.getUser();
-    setState(() {
-      user = data;
-    });
+    final prefs = await SharedPreferences.getInstance();
+    int? userId = prefs.getInt('userLoginId');
+    if (userId != null) {
+      final data = await repository.getUser(userId);
+      setState(() {
+        user = data;
+      });
+    } else {
+      print('Login failed');
+    }
   }
 
   @override
@@ -71,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       (route) => false);
                 },
-                child: Text('Sign Out'))
+                child: const Text('Sign Out'))
           ],
         ),
       ),

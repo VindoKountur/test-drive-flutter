@@ -74,7 +74,6 @@ class _UsersPageState extends State<UsersPage> {
             builder: (context) => DetailPage(user: user),
           ),
         ).then((value) {
-          // print(value.runtimeType);
           setState(() => highlightUserId = value);
         });
       },
